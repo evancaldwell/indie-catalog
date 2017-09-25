@@ -127,7 +127,7 @@
           this.removeAttribute('unresolved');
           this.$.ajax.addEventListener('response', this.onResponse.bind(this));
           this.$.ajax.addEventListener('error', this.onError);
-          this.$.ajax.url = 'catalog.json';
+          this.$.ajax.url = 'nsCatalog.json';
 
           this.addEventListener('item-clicked', this.onItemClicked.bind(this));
           this.$.frame.addEventListener('load', function() {

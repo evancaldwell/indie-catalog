@@ -24,7 +24,7 @@ gulp.task('clean', function() {
 let repos = [];
 
 gulp.task('make-dist', function() {
-  let json = JSON.parse(fs.readFileSync(__dirname + '/catalog.json'));
+  let json = JSON.parse(fs.readFileSync(__dirname + '/nsCatalog.json'));
   let packages = json.packages;
 
   for (var repo in packages) {
