@@ -58,38 +58,39 @@ gulp.task('make-dist', function() {
       if (packages[repo].elements) {
         console.log('has an elements node');
         let inputs = packages[repo].elements;
+        let analyzerRoot = 'webcomponents/web/' + repoName + '/';
         analyzeInputs(inputs, repoName, analyzerRoot).then(function(analysis) {
           var blob = JSON.stringify(generateAnalysis(analysis, analyzerRoot));
           fs.writeFileSync(path + '/descriptor.json', blob);
 
           let docsFile =
-`
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-<title>${repoName}</title>
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../bower_components/iron-doc-viewer/iron-doc-viewer.html">
-<link rel="import" href="../../bower_components/iron-doc-viewer/default-theme.html">
-<link rel="import" href="../../bower_components/polymer/lib/elements/custom-style.html">
-<link rel="import" href="../../bower_components/polymer/lib/elements/dom-bind.html">
-<script src="../../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
-<custom-style>
-  <style is="custom-style" include="iron-doc-default-theme"></style>
-</custom-style>
-</head>
-<body>
-<dom-bind>
-  <template>
-    <iron-ajax auto url="./descriptor.json" last-response="{{response}}" handle-as="json"></iron-ajax>
-    <iron-doc-viewer descriptor="[[response]]"></iron-doc-viewer>
-  </template>
-</dom-bind>
-</body>
-</html>
-`;
+            `
+            <!doctype html>
+            <html>
+            <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+            <title>${repoName}</title>
+            <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+            <link rel="import" href="../../bower_components/iron-doc-viewer/iron-doc-viewer.html">
+            <link rel="import" href="../../bower_components/iron-doc-viewer/default-theme.html">
+            <link rel="import" href="../../bower_components/polymer/lib/elements/custom-style.html">
+            <link rel="import" href="../../bower_components/polymer/lib/elements/dom-bind.html">
+            <script src="../../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+            <custom-style>
+              <style is="custom-style" include="iron-doc-default-theme"></style>
+            </custom-style>
+            </head>
+            <body>
+            <dom-bind>
+              <template>
+                <iron-ajax auto url="./descriptor.json" last-response="{{response}}" handle-as="json"></iron-ajax>
+                <iron-doc-viewer descriptor="[[response]]"></iron-doc-viewer>
+              </template>
+            </dom-bind>
+            </body>
+            </html>
+            `;
           fs.writeFileSync(path + '/docs.html', docsFile);
         }).catch(function(error) {
           console.log(error);
@@ -141,33 +142,33 @@ gulp.task('make-dist', function() {
             fs.writeFileSync(path + '/descriptor.json', blob);
 
             let docsFile =
-`
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <title>${repoName}</title>
-  <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-  <link rel="import" href="../../bower_components/iron-doc-viewer/iron-doc-viewer.html">
-  <link rel="import" href="../../bower_components/iron-doc-viewer/default-theme.html">
-  <link rel="import" href="../../bower_components/polymer/lib/elements/custom-style.html">
-  <link rel="import" href="../../bower_components/polymer/lib/elements/dom-bind.html">
-  <script src="../../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
-  <custom-style>
-    <style is="custom-style" include="iron-doc-default-theme"></style>
-  </custom-style>
-</head>
-<body>
-  <dom-bind>
-    <template>
-      <iron-ajax auto url="./descriptor.json" last-response="{{response}}" handle-as="json"></iron-ajax>
-      <iron-doc-viewer descriptor="[[response]]"></iron-doc-viewer>
-    </template>
-  </dom-bind>
-</body>
-</html>
-`;
+              `
+              <!doctype html>
+              <html>
+              <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+                <title>${repoName}</title>
+                <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+                <link rel="import" href="../../bower_components/iron-doc-viewer/iron-doc-viewer.html">
+                <link rel="import" href="../../bower_components/iron-doc-viewer/default-theme.html">
+                <link rel="import" href="../../bower_components/polymer/lib/elements/custom-style.html">
+                <link rel="import" href="../../bower_components/polymer/lib/elements/dom-bind.html">
+                <script src="../../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+                <custom-style>
+                  <style is="custom-style" include="iron-doc-default-theme"></style>
+                </custom-style>
+              </head>
+              <body>
+                <dom-bind>
+                  <template>
+                    <iron-ajax auto url="./descriptor.json" last-response="{{response}}" handle-as="json"></iron-ajax>
+                    <iron-doc-viewer descriptor="[[response]]"></iron-doc-viewer>
+                  </template>
+                </dom-bind>
+              </body>
+              </html>
+              `;
             fs.writeFileSync(path + '/docs.html', docsFile);
           }).catch(function(error) {
             console.log(error);
