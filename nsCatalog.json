@@ -65,17 +65,17 @@
       "description": "Elements for NuSkin shop"
     },
     "account-elements": {
-      "git": "https://github.com/polymerelements/paper-button",
-      "description": "A Material Design button"
+      "git": "ssh://git@bitbucket.nuskin.net/fa/webcomponents.git",
+      "description": "Elements for NuSkin accounts"
+    },
+    "application-elements": {
+      "git": "ssh://git@bitbucket.nuskin.net/fa/webcomponents.git",
+      "description": "NuSkin application elements"
     },
     "paper-checkbox": {
       "description": "A Material Design checkbox with remote docs and demo",
       "demo": "https://raw-dot-custom-elements.appspot.com/PolymerElements/paper-checkbox/v2.0.0/paper-checkbox/demo/index.html",
       "docs": "https://www.webcomponents.org/element/PolymerElements/paper-checkbox"
-    },
-    "application-elements": {
-      "git": "ssh://git@bitbucket.nuskin.net/fa/webcomponents.git",
-      "description": "NuSkin application elements"
     },
     "paper-button": {
       "git": "https://github.com/polymerelements/paper-button",
