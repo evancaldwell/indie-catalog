@@ -61,16 +61,29 @@
   ],
   "packages": {
     "shop-elements": {
-      "git": "ssh://git@bitbucket.nuskin.net/fa/webcomponents.git",
-      "description": "Elements for NuSkin shop"
+      "description": "Elements for NuSkin shop",
+      "elements": [
+        "ns-product-overlay"
+      ]
     },
     "account-elements": {
-      "git": "ssh://git@bitbucket.nuskin.net/fa/webcomponents.git",
-      "description": "Elements for NuSkin accounts"
+      "description": "Elements for NuSkin accounts",
+      "elements": [
+        "ns-dropdown",
+        "vg-dropdown",
+        "ns-field-input"
+      ]
     },
     "application-elements": {
-      "git": "ssh://git@bitbucket.nuskin.net/fa/webcomponents.git",
-      "description": "NuSkin application elements"
+      "description": "NuSkin application elements",
+      "elements": [
+        "ns-application",
+        "ns-configuration",
+        "ns-footer",
+        "ns-header",
+        "ns-login",
+        "ns-user"
+      ]
     },
     "paper-checkbox": {
       "description": "A Material Design checkbox with remote docs and demo",

@@ -17,6 +17,15 @@ function escapeRegExp(str) {
   return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 }
 
+// extracting the analyzer
+function analyzeInputs(inputs, repoName, analyzerRoot) {
+  const analyzer = new Analyzer({
+    urlLoader: new FSUrlLoader(analyzerRoot),
+    urlResolver: new PackageUrlResolver(),
+  });
+  return analyzer.analyze(inputs)
+}
+
 gulp.task('clean', function() {
   return del([__dirname + '/dist']);
 });
@@ -34,13 +43,6 @@ gulp.task('make-dist', function() {
   //   // del(['webcomponents/**/*', '!webcomponents/web']);
   // });
 
-  fs.copy(__dirname + '/webcomponents/web', __dirname + '/dist/', function(err){
-    if (err) {
-      console.log(err);
-    }
-    console.log('copied web dir');
-  })
-
   let json = JSON.parse(fs.readFileSync(__dirname + '/nsCatalog.json'));
   let packages = json.packages;
 
@@ -53,6 +55,46 @@ gulp.task('make-dist', function() {
 
     // Skip this bit if there's nothing to clone.
     if (!packages[repo].git) {
+      if (packages[repo].elements) {
+        console.log('has an elements node');
+        let inputs = packages[repo].elements;
+        analyzeInputs(inputs, repoName, analyzerRoot).then(function(analysis) {
+          var blob = JSON.stringify(generateAnalysis(analysis, analyzerRoot));
+          fs.writeFileSync(path + '/descriptor.json', blob);
+
+          let docsFile =
+`
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+<title>${repoName}</title>
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-doc-viewer/iron-doc-viewer.html">
+<link rel="import" href="../../bower_components/iron-doc-viewer/default-theme.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/custom-style.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-bind.html">
+<script src="../../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+<custom-style>
+  <style is="custom-style" include="iron-doc-default-theme"></style>
+</custom-style>
+</head>
+<body>
+<dom-bind>
+  <template>
+    <iron-ajax auto url="./descriptor.json" last-response="{{response}}" handle-as="json"></iron-ajax>
+    <iron-doc-viewer descriptor="[[response]]"></iron-doc-viewer>
+  </template>
+</dom-bind>
+</body>
+</html>
+`;
+          fs.writeFileSync(path + '/docs.html', docsFile);
+        }).catch(function(error) {
+          console.log(error);
+        });
+      }
       continue;
     }
 
@@ -80,12 +122,12 @@ gulp.task('make-dist', function() {
         // the demo works.
         gulp.src(path + '/**').pipe(gulp.dest(`${path}/bower_components/${repoName}`));
 
-        // Step 6. Run analyzer.
+        // // Step 6. Run analyzer.
         let analyzerRoot = 'dist/' + repoName + '/';
-        const analyzer = new Analyzer({
-          urlLoader: new FSUrlLoader(analyzerRoot),
-          urlResolver: new PackageUrlResolver(),
-        });
+        // const analyzer = new Analyzer({
+        //   urlLoader: new FSUrlLoader(analyzerRoot),
+        //   urlResolver: new PackageUrlResolver(),
+        // });
 
         // const isInPackage = feature => feature.sourceRange != null &&
         //   feature.sourceRange.file.startsWith(path.basename(root));
@@ -94,7 +136,7 @@ gulp.task('make-dist', function() {
           console.log('got nothing to analyze');
           // TODO: fall back to package analysis
         } else {
-          analyzer.analyze(inputs).then(function(analysis) {
+          analyzeInputs(inputs, repoName, analyzerRoot).then(function(analysis) {
             var blob = JSON.stringify(generateAnalysis(analysis, analyzerRoot));
             fs.writeFileSync(path + '/descriptor.json', blob);
 
@@ -146,10 +188,20 @@ gulp.task('copy-dist-to-build', function() {
 });
 
 gulp.task('default', function(done) {
-  runSequence('clean', 'make-dist', 'polymer-build', 'copy-dist-to-build');
+  runSequence('clean', 'copy-components', 'make-dist', 'polymer-build', 'copy-dist-to-build');
 });
 
 // Note: this assume your local 'dist' folder is ok (you've ran make-dist in the past)
 gulp.task('debug', function(done) {
   runSequence('polymer-build', 'copy-dist-to-build');
+});
+
+// copy webcomponents cloned from bitbucket into /dist
+gulp.task('copy-components', function() {
+  return fs.copy(__dirname + '/webcomponents/web', __dirname + '/dist/', (err) => {
+    if (err) {
+      console.log(err);
+    }
+    console.log('copied web dir');
+  });
 });
