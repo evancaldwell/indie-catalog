@@ -2,7 +2,7 @@
 
 const bower = require('gulp-bower');
 const del = require('del');
-const fs = require('fs');
+const fs = require('fs-extra');
 const git = require('gulp-git');
 const gulp = require('gulp');
 const runSequence = require('run-sequence');
@@ -24,6 +24,23 @@ gulp.task('clean', function() {
 let repos = [];
 
 gulp.task('make-dist', function() {
+  // pull components in from Bitbucket
+  // git.clone('ssh://git@bitbucket.nuskin.net/fa/webcomponents.git', {args: __dirname + '/dist/'}, function (err) {
+  //   if (err) {
+  //     console.log(err);
+  //     return;
+  //   }
+  //   // eliminate what we don't need
+  //   // del(['webcomponents/**/*', '!webcomponents/web']);
+  // });
+
+  fs.copy(__dirname + '/webcomponents/web', __dirname + '/dist/', function(err){
+    if (err) {
+      console.log(err);
+    }
+    console.log('copied web dir');
+  })
+
   let json = JSON.parse(fs.readFileSync(__dirname + '/nsCatalog.json'));
   let packages = json.packages;
 
