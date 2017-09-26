@@ -61,7 +61,7 @@
   ],
   "packages": {
     "shop-elements": {
-      "git": "https://bitbucket.nuskin.net/projects/FA/repos/webcomponents/browse/web/ns-shop",
+      "git": "ssh://git@bitbucket.nuskin.net/fa/webcomponents.git",
       "description": "Elements for NuSkin shop"
     },
     "account-elements": {
@@ -74,8 +74,12 @@
       "docs": "https://www.webcomponents.org/element/PolymerElements/paper-checkbox"
     },
     "application-elements": {
-      "git": "https://bitbucket.nuskin.net/projects/FA/repos/webcomponents/browse/web/ns-application",
+      "git": "ssh://git@bitbucket.nuskin.net/fa/webcomponents.git",
       "description": "NuSkin application elements"
+    },
+    "paper-button": {
+      "git": "https://github.com/polymerelements/paper-button",
+      "description": "A Material Design button"
     },
     "lazy-image": {
       "git": "https://github.com/notwaldorf/lazy-image",
